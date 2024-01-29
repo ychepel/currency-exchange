@@ -16,11 +16,11 @@ public class TransactionHistoryHandler {
 
 
     public TransactionHistoryHandler(String path) {
-        create(path);
+        createIfNotExists(path);
     }
 
 
-    private void create(String path) {
+    private void createIfNotExists(String path) {
         try {
             this.file.createNewFile();
         } catch (IOException e) {
