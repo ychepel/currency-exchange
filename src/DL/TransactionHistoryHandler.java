@@ -35,7 +35,7 @@ public class TransactionHistoryHandler {
                 String newTransaction = scanner.nextLine();
                 String[] properties = newTransaction.split(";");
                 Transaction transaction = new Transaction(
-                        convertingStringToDateTime(properties[0]),
+                        convertToDateTime(properties[0]),
                         Double.parseDouble(properties[1].replace(",",".")),
                         CurrencyTitle.valueOf(properties[2]),
                         CurrencyTitle.valueOf(properties[3]),
@@ -75,7 +75,7 @@ public class TransactionHistoryHandler {
                 transaction.getExchangeRate());
     }
 
-    private LocalDateTime convertingStringToDateTime(String datetime){
+    private LocalDateTime convertToDateTime(String datetime){
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS");
         return LocalDateTime.parse(datetime, dateTimeFormatter);
     }
