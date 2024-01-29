@@ -1,16 +1,17 @@
 package BL;
 
+import DL.CurrencyExchangeHandler;
+import DL.CurrencyTitle;
 import java.util.HashMap;
 
 public class CurrencyManager {
-    //Определяет статическую константу - значение валюты по умолчанию
-    public static final CurrencyTitle defaultCurrency = CurrencyTitle.EUR;
+
     // Определяет приватное поле data, предназначенное для хранения экземпляра класса CurrencyExchangeHandler
+    private static final String RATE_FILE_PATH = "src/rates.txt";
     private final CurrencyExchangeHandler data;
 
-    // Конструктор
-    public CurrentManager(String rateFilePath) {
-        this.data = new CurrencyExchangeHandler(rateFilePath);
+    public CurrencyManager() {
+        this.data = new CurrencyExchangeHandler(this.RATE_FILE_PATH);
     }
 
     /**
@@ -18,7 +19,7 @@ public class CurrencyManager {
      * Использует метод read() класса CurrencyExchangeHandler.
      * Метод возвращает HashMap с валютами и их курсами.
     **/
-     public HashMap<String, Double> getAllCurrency () {
+     public HashMap<CurrencyTitle, Double> getAllCurrency () {
         return data.read();
     }
 
@@ -27,25 +28,18 @@ public class CurrencyManager {
      * Метод возвращает переменную типа double - курс обмена между заданными валютами
      **/
     public double calculateRate (CurrencyTitle initialCurrency, CurrencyTitle resultCurrency){
-        HashMap<CurrencyTitle, Double> exchangeRate = data.read();
-
+        HashMap<CurrencyTitle, Double> exchangeRates = data.read();
+        return exchangeRates.get(resultCurrency) / exchangeRates.get(initialCurrency);
         //TODO - предусмотреть случай, когда курс = 0
-
-        if (initialCurrency.equals(defaultCurrency)) {
-            return 1 / exchangeRate.get(resultCurrency);
-        } else if (resultCurrency.equals(defaultCurrency)) {
-            return exchangeRate.get(initialCurrency);
-        } else {
-            return exchangeRate.get(initialCurrency) / exchangeRate.get(resultCurrency);
-        }
     }
 
     /** Метод calculateTotalAmount - рассчитывает конечную сумму после обмена.
-     * Параметры метода: InitialCurrencyAmount - сумма обмена, initialCurrency начальная валюта, resultCurrency  конечная валюта
+     * Параметры метода: InitialCurrencyAmount - сумма обмена, initialCurrency начальная валюта, resultCurrency конечная валюта
      * Метод возвращает переменную типа double - конечная сумма после обмена
     **/
     public double calculateTotalAmount (double InitialCurrencyAmount,CurrencyTitle initialCurrency, CurrencyTitle resultCurrency) {
         return calculateRate(initialCurrency, resultCurrency) * InitialCurrencyAmount;
 
-}
+
+    }
 }
