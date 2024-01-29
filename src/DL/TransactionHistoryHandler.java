@@ -4,11 +4,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
 public class TransactionHistoryHandler {
+
     private final String path;
 
 
@@ -35,7 +38,7 @@ public class TransactionHistoryHandler {
                 String newTask = scanner.nextLine();
                 String[] propertiesOfTransaction = newTask.split(";");
                 Transaction transaction = new Transaction(
-                        propertiesOfTransaction[0],
+                        convertingStringToDateTime(propertiesOfTransaction[0]),
                         Double.parseDouble(propertiesOfTransaction[1].replace(",",".")),
                         CurrencyTitle.valueOf(propertiesOfTransaction[2]),
                         CurrencyTitle.valueOf(propertiesOfTransaction[3]),
@@ -49,20 +52,26 @@ public class TransactionHistoryHandler {
         return result;
     }
 
+
     public void append(Transaction transaction){
         try (FileWriter fileWriter = new FileWriter(this.path,true)) {
-            fileWriter.append(convertingTransaction(transaction)+"\n");
+            fileWriter.append(convertedTransaction(transaction)+"\n");
         }catch (IOException e){
             System.out.println(e.getMessage());
         }
     }
 
-    private String convertingTransaction(Transaction transaction){
+    private String convertedTransaction(Transaction transaction){
         return String.format("%s;%.1f;%s;%s;%.2f",
-                transaction.getDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                transaction.getDateTime(),
                 transaction.getInitialCurrencyAmount(),
                 transaction.getInitialCurrencyTitle(),
                 transaction.getResultCurrencyTitle(),
                 transaction.getExchangeRate());
+    }
+
+    private LocalDateTime convertingStringToDateTime(String datetime){
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS");
+        return LocalDateTime.parse(datetime, dateTimeFormatter);
     }
 }
