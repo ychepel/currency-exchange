@@ -30,7 +30,7 @@ public class TransactionHistoryHandler {
 
     public ArrayList<Transaction> read(){
         ArrayList<Transaction> result = new ArrayList<>();
-        try(Scanner scanner = new Scanner(new File(this.path))){
+        try(Scanner scanner = new Scanner(this.file)){
             while (scanner.hasNextLine()) {
                 String newTransaction = scanner.nextLine();
                 String[] properties = newTransaction.split(";");
@@ -51,11 +51,19 @@ public class TransactionHistoryHandler {
 
 
     public void append(Transaction transaction){
-        try (FileWriter fileWriter = new FileWriter(this.path,true)) {
-            fileWriter.append(convertedTransaction(transaction)+"\n");
+        try (FileWriter fileWriter = new FileWriter(this.file,true)) {
+            if (isEmpty()){
+                fileWriter.append(convertedTransaction(transaction));
+            }else {
+                fileWriter.append("\n"+convertedTransaction(transaction));
+            }
         }catch (IOException e){
             System.out.println(e.getMessage());
         }
+    }
+
+    private boolean isEmpty(){
+        return read().isEmpty();
     }
 
     private String convertedTransaction(Transaction transaction){
