@@ -12,22 +12,19 @@ import java.util.Scanner;
 
 public class TransactionHistoryHandler {
 
-    private final String path;
+    private File file;
 
 
     public TransactionHistoryHandler(String path) {
         create(path);
-        this.path = path;
     }
 
 
-    private boolean create(String path) {
-        File file = new File(path);
+    private void create(String path) {
         try {
-            return file.createNewFile();
+            this.file.createNewFile();
         } catch (IOException e) {
             System.out.println(e.getMessage());
-            return false;
         }
     }
 
@@ -35,14 +32,14 @@ public class TransactionHistoryHandler {
         ArrayList<Transaction> result = new ArrayList<>();
         try(Scanner scanner = new Scanner(new File(this.path))){
             while (scanner.hasNextLine()) {
-                String newTask = scanner.nextLine();
-                String[] propertiesOfTransaction = newTask.split(";");
+                String newTransaction = scanner.nextLine();
+                String[] properties = newTransaction.split(";");
                 Transaction transaction = new Transaction(
-                        convertingStringToDateTime(propertiesOfTransaction[0]),
-                        Double.parseDouble(propertiesOfTransaction[1].replace(",",".")),
-                        CurrencyTitle.valueOf(propertiesOfTransaction[2]),
-                        CurrencyTitle.valueOf(propertiesOfTransaction[3]),
-                        Double.parseDouble(propertiesOfTransaction[4].replace(",",".")));
+                        convertingStringToDateTime(properties[0]),
+                        Double.parseDouble(properties[1].replace(",",".")),
+                        CurrencyTitle.valueOf(properties[2]),
+                        CurrencyTitle.valueOf(properties[3]),
+                        Double.parseDouble(properties[4].replace(",",".")));
                 result.add(transaction);
             }
             return result;
