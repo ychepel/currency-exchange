@@ -1,5 +1,7 @@
 package BL;
 
+import DL.CurrencyExchangeHandler;
+import DL.CurrencyTitle;
 import java.util.HashMap;
 
 public class CurrencyManager {
@@ -29,20 +31,12 @@ public class CurrencyManager {
      **/
     public double calculateRate (CurrencyTitle initialCurrency, CurrencyTitle resultCurrency){
         HashMap<CurrencyTitle, Double> exchangeRate = data.read();
-
+        return exchangeRate.get(resultCurrency) / exchangeRate.get(initialCurrency);
         //TODO - предусмотреть случай, когда курс = 0
-
-        if (initialCurrency.equals(DEFAULT_CURRENCY)) {
-            return 1 / exchangeRate.get(resultCurrency);
-        } else if (resultCurrency.equals(DEFAULT_CURRENCY)) {
-            return exchangeRate.get(initialCurrency);
-        } else {
-            return exchangeRate.get(initialCurrency) / exchangeRate.get(resultCurrency);
-        }
     }
 
     /** Метод calculateTotalAmount - рассчитывает конечную сумму после обмена.
-     * Параметры метода: InitialCurrencyAmount - сумма обмена, initialCurrency начальная валюта, resultCurrency  конечная валюта
+     * Параметры метода: InitialCurrencyAmount - сумма обмена, initialCurrency начальная валюта, resultCurrency конечная валюта
      * Метод возвращает переменную типа double - конечная сумма после обмена
     **/
     public double calculateTotalAmount (double InitialCurrencyAmount,CurrencyTitle initialCurrency, CurrencyTitle resultCurrency) {
