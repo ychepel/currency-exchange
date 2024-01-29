@@ -53,9 +53,9 @@ public class TransactionHistoryHandler {
     public void append(Transaction transaction){
         try (FileWriter fileWriter = new FileWriter(this.file,true)) {
             if (isEmpty()){
-                fileWriter.append(convertedTransaction(transaction));
+                fileWriter.append(getFormatted(transaction));
             }else {
-                fileWriter.append("\n"+convertedTransaction(transaction));
+                fileWriter.append("\n"+getFormatted(transaction));
             }
         }catch (IOException e){
             System.out.println(e.getMessage());
@@ -66,7 +66,7 @@ public class TransactionHistoryHandler {
         return read().isEmpty();
     }
 
-    private String convertedTransaction(Transaction transaction){
+    private String getFormatted(Transaction transaction){
         return String.format("%s;%.1f;%s;%s;%.2f",
                 transaction.getDateTime(),
                 transaction.getInitialCurrencyAmount(),
