@@ -5,8 +5,7 @@ import DL.CurrencyTitle;
 import java.util.HashMap;
 
 public class CurrencyManager {
-    //Определяет статическую константу - значение валюты по умолчанию
-    public static final CurrencyTitle DEFAULT_CURRENCY = CurrencyTitle.EUR;
+
     // Определяет приватное поле data, предназначенное для хранения экземпляра класса CurrencyExchangeHandler
     private static final String RATE_FILE_PATH = "src/rates.txt";
     private final CurrencyExchangeHandler data;
