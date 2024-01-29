@@ -1,19 +1,25 @@
 package BL;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+import DL.CurrencyExchangeHandler;
+import DL.TransactionHistoryHandler;
+import DL.CurrencyTitle;
+
 public class TransactionManager {
-    // Определяет приватное поле dataRate, предназначенное для хранения экземпляра класса CurrencyExchangeHandler
-    private final CurrencyExchangeHandler dataRate;
     // Определяет приватное поле dataHistory, предназначенное для хранения экземпляра класса TransactionHistoryHandler
+    private static final String HISTORY_FILE_PATH = "src/history.csv";
     private final TransactionHistoryHandler dataHistory;
+    private final CurrencyManager exchangeRate;
+
 
     // Конструктор класса
-    public TransactionManager(String rateFilePath, String historyFilePath ) {
-        this.dataRate = new CurrencyExchangeHandler(rateFilePath);
-        this.dataHistory = new TransactionHistoryHandler(historyFilePath);
+    public TransactionManager() {
+        this.dataHistory = new TransactionHistoryHandler(HISTORY_FILE_PATH);
+        this.exchangeRate = new CurrencyManager();
 
     }
 
@@ -32,7 +38,7 @@ public class TransactionManager {
                 initialCurrencyAmount,
                 initialCurrency,
                 resultCurrency,
-                dataRate.calculateRate(initialCurrency, resultCurrency)
+                exchangeRate.calculateRate(initialCurrency, resultCurrency)
         );
         // Добавляем  новую транзакцию в историю
         data.add(newTransaction);
