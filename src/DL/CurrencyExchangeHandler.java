@@ -17,8 +17,8 @@ public class CurrencyExchangeHandler {
         try (Scanner scanner = new Scanner(this.file)){
             while (scanner.hasNextLine()){
                 String currencyRate = scanner.nextLine();
-                String[] preHashMap = currencyRate.split(",");
-                hashMapList.put(CurrencyTitle.valueOf(preHashMap[0]),Double.parseDouble(preHashMap[1]));
+                String[] preHashMap = currencyRate.split(";");
+                hashMapList.put(CurrencyTitle.valueOf(preHashMap[0]),Double.parseDouble(preHashMap[1].replace(",",".")));
             }
         }catch (FileNotFoundException e){
             System.out.println("Error: "+e.getMessage());
