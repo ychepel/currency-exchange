@@ -2,7 +2,9 @@ package DL;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -45,5 +47,22 @@ public class TransactionHistoryHandler {
             System.out.println(e.getMessage());
         }
         return result;
+    }
+
+    public void append(Transaction transaction){
+        try (FileWriter fileWriter = new FileWriter(this.path,true)) {
+            fileWriter.append(convertingTransaction(transaction)+"\n");
+        }catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private String convertingTransaction(Transaction transaction){
+        return String.format("%s;%.1f;%s;%s;%.2f",
+                transaction.getDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                transaction.getInitialCurrencyAmount(),
+                transaction.getInitialCurrencyTitle(),
+                transaction.getResultCurrencyTitle(),
+                transaction.getExchangeRate());
     }
 }
