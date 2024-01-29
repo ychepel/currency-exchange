@@ -4,18 +4,18 @@ import java.time.LocalDate;
 
 public class Transaction {
     private LocalDate deadLine;
-    private double InitialCurrencyAmount;
-    private String InitialCurrencyTitle;
-    private String ResultCurrencyTitle;
-    private double ExchangeRate;
+    private double initialCurrencyAmount;
+    private CurrencyTitle initialCurrencyTitle;
+    private CurrencyTitle resultCurrencyTitle;
+    private double exchangeRate;
 
 
-    public Transaction(LocalDate deadLine, double initialCurrencyAmount, String initialCurrencyTitle, String resultCurrencyTitle, double exchangeRate) {
+    public Transaction(LocalDate deadLine, double initialCurrencyAmount, CurrencyTitle initialCurrencyTitle, CurrencyTitle resultCurrencyTitle, double exchangeRate) {
         this.deadLine = deadLine;
-        InitialCurrencyAmount = initialCurrencyAmount;
-        InitialCurrencyTitle = initialCurrencyTitle;
-        ResultCurrencyTitle = resultCurrencyTitle;
-        ExchangeRate = exchangeRate;
+        this.initialCurrencyAmount = initialCurrencyAmount;
+        this.initialCurrencyTitle = initialCurrencyTitle;
+        this.resultCurrencyTitle = resultCurrencyTitle;
+        this.exchangeRate = exchangeRate;
     }
 
     public LocalDate getDeadLine() {
@@ -27,45 +27,45 @@ public class Transaction {
     }
 
     public double getInitialCurrencyAmount() {
-        return InitialCurrencyAmount;
+        return initialCurrencyAmount;
     }
 
     public void setInitialCurrencyAmount(double initialCurrencyAmount) {
-        InitialCurrencyAmount = initialCurrencyAmount;
+        this.initialCurrencyAmount = initialCurrencyAmount;
     }
 
-    public String getInitialCurrencyTitle() {
-        return InitialCurrencyTitle;
+    public CurrencyTitle getInitialCurrencyTitle() {
+        return initialCurrencyTitle;
     }
 
-    public void setInitialCurrencyTitle(String initialCurrencyTitle) {
-        InitialCurrencyTitle = initialCurrencyTitle;
+    public void setInitialCurrencyTitle(CurrencyTitle initialCurrencyTitle) {
+        this.initialCurrencyTitle = initialCurrencyTitle;
     }
 
-    public String getResultCurrencyTitle() {
-        return ResultCurrencyTitle;
+    public CurrencyTitle getResultCurrencyTitle() {
+        return resultCurrencyTitle;
     }
 
-    public void setResultCurrencyTitle(String resultCurrencyTitle) {
-        ResultCurrencyTitle = resultCurrencyTitle;
+    public void setResultCurrencyTitle(CurrencyTitle resultCurrencyTitle) {
+        this.resultCurrencyTitle = resultCurrencyTitle;
     }
 
     public double getExchangeRate() {
-        return ExchangeRate;
+        return exchangeRate;
     }
 
     public void setExchangeRate(double exchangeRate) {
-        ExchangeRate = exchangeRate;
+        this.exchangeRate = exchangeRate;
     }
 
     @Override
     public String toString() {
         return "Transaction{" +
                 "deadLine=" + deadLine +
-                ", InitialCurrencyAmount=" + InitialCurrencyAmount +
-                ", InitialCurrencyTitle='" + InitialCurrencyTitle + '\'' +
-                ", ResultCurrencyTitle='" + ResultCurrencyTitle + '\'' +
-                ", ExchangeRate=" + ExchangeRate +
+                ", InitialCurrencyAmount=" + initialCurrencyAmount +
+                ", InitialCurrencyTitle='" + initialCurrencyTitle + '\'' +
+                ", ResultCurrencyTitle='" + resultCurrencyTitle + '\'' +
+                ", ExchangeRate=" + exchangeRate +
                 '}';
     }
 }
