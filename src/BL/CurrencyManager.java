@@ -8,12 +8,11 @@ public class CurrencyManager {
     //Определяет статическую константу - значение валюты по умолчанию
     public static final CurrencyTitle DEFAULT_CURRENCY = CurrencyTitle.EUR;
     // Определяет приватное поле data, предназначенное для хранения экземпляра класса CurrencyExchangeHandler
-    private String rateFilePath = "src/rate.txt";
+    private static final String RATE_FILE_PATH = "src/rates.txt";
     private final CurrencyExchangeHandler data;
 
-    // Конструктор
     public CurrencyManager() {
-        this.data = new CurrencyExchangeHandler(this.rateFilePath);
+        this.data = new CurrencyExchangeHandler(this.RATE_FILE_PATH);
     }
 
     /**
@@ -30,8 +29,8 @@ public class CurrencyManager {
      * Метод возвращает переменную типа double - курс обмена между заданными валютами
      **/
     public double calculateRate (CurrencyTitle initialCurrency, CurrencyTitle resultCurrency){
-        HashMap<CurrencyTitle, Double> exchangeRate = data.read();
-        return exchangeRate.get(resultCurrency) / exchangeRate.get(initialCurrency);
+        HashMap<CurrencyTitle, Double> exchangeRates = data.read();
+        return exchangeRates.get(resultCurrency) / exchangeRates.get(initialCurrency);
         //TODO - предусмотреть случай, когда курс = 0
     }
 
