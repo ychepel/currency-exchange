@@ -2,21 +2,21 @@ package UI;
 
 import BL.CurrencyManager;
 import BL.TransactionManager;
-import DL.CurrencyExchangeHandler;
 import DL.CurrencyTitle;
 import DL.Transaction;
-import DL.TransactionHistoryHandler;
-import java.io.File;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.time.format.DateTimeParseException;
+import java.util.*;
 
 public class ConsoleUI {
 
-    private static Scanner scanner = new Scanner(System.in);
+    private static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    private static final Scanner scanner = new Scanner(System.in);
+
     public static void run() {
+        printHeader();
         while (true) {
             System.out.println("Выберите опцию: ");
             System.out.println("1. Поменять валюту");
@@ -37,31 +37,50 @@ public class ConsoleUI {
         }
     }
 
+    private static void printHeader() {
+        System.out.println("\n" +
+                " __        __   __   ___       __          ___      __                  __   ___ \n" +
+                "/  ` |  | |__) |__) |__  |\\ | /  ` \\ /    |__  \\_/ /  ` |__|  /\\  |\\ | / _` |__  \n" +
+                "\\__, \\__/ |  \\ |  \\ |___ | \\| \\__,  |     |___ / \\ \\__, |  | /~~\\ | \\| \\__> |___ \n" +
+                "                                                                                 \n");
+    }
+
     private static void exchangeCurrency() {
-        System.out.println("Введите сумму для обмена: ");
+        CurrencyManager currencyManager = new CurrencyManager();
+
+        LocalDate currentDate = LocalDate.now();
+
+        System.out.printf("Сегодня %s. Для обмена доступны следующие валюты:  %s.%n",
+                currentDate.format(dateFormat),
+                currencyManager.getAvailableCurrencies()
+        );
+
+        System.out.print("Введите валюту, которую хотите обменять: ");
+        String fromCurrencyString = scanner.nextLine().toUpperCase();
+        CurrencyTitle fromCurrency = CurrencyTitle.valueOf(fromCurrencyString);
+
+        System.out.print("Введите сумму для обмена: ");
         double amount = scanner.nextDouble();
         scanner.nextLine();
 
-        CurrencyManager currencyManager = new CurrencyManager(new CurrencyExchangeHandler("rates.txt"));
+        System.out.print("Введите валюту, которую хотите приобрести: ");
+        String toCurrencyString = scanner.nextLine().toUpperCase();
+        CurrencyTitle toCurrency = CurrencyTitle.valueOf(toCurrencyString);
 
-        System.out.println("Введите валюту, которую хотите обменять: ");
-        String fromCurrency = scanner.nextLine().toUpperCase();
-        System.out.println("Введите валюту, которую хотите приобрести: ");
-        String toCurrency = scanner.nextLine().toUpperCase();
+        double rate = currencyManager.calculateRate(fromCurrency, toCurrency);
+        double resultAmount = amount * rate;
 
-        double fromCurrencyRate = currencyManager.getRate(fromCurrency);
-        double toCurrencyRate = currencyManager.getRate(toCurrency);
-
-        double resultAmount = amount * fromCurrencyRate / toCurrencyRate;
-
-        System.out.printf("Вы хотите обменять %.2f %s на %.2f %s по курсу %.4f? (да/нет) %n",
-                amount, fromCurrency, resultAmount, toCurrency, fromCurrencyRate / toCurrencyRate
+        System.out.printf("Вы хотите обменять %.2f %s на %.2f %s по курсу %.4f? (Y/N)%n",
+                amount,
+                fromCurrency,
+                resultAmount,
+                toCurrency,
+                rate
         );
         String answer = scanner.nextLine().toLowerCase();
-        if (answer.equals("да")) {
-            Transaction transaction = new Transaction(LocalDate.now(), amount, fromCurrency, toCurrency, fromCurrencyRate / toCurrencyRate);
-            TransactionManager.getInstance().addTransaction(transaction);
-
+        if ("y".equals(answer)) {
+            TransactionManager transactionManager = new TransactionManager();
+            transactionManager.addTransaction(amount, fromCurrency, toCurrency, rate);
             System.out.println("Обмен успешно выполнен");
         } else {
             System.out.println("Обмен отменен");
@@ -69,27 +88,52 @@ public class ConsoleUI {
     }
 
     private static void showHistory() {
-        TransactionManager transactionManager = TransactionManager.getInstance();
-
-        System.out.println("Хотите ли посмотреть всю историю или за период? (всю/период) ");
-        String answer = scanner.nextLine().toLowerCase();
-        if (answer.equals("всю")) {
-            List<Transaction> transactions = transactionManager.getAllTransactions();
-            for (Transaction transaction : transactions) {
-                System.out.println(transaction);
+        TransactionManager transactionManager = new TransactionManager();
+        while (true) {
+            System.out.println("Выберите опцию: ");
+            System.out.println("1. Вся история");
+            System.out.println("2. За период");
+            System.out.println("0. Вернуться в предыдущее меню");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+            ArrayList<Transaction> transactions = new ArrayList<>();
+            switch (choice) {
+                case 1:
+                    transactions = getHistoryAll(transactionManager);
+                    break;
+                case 2:
+                    transactions = getHistoryFiltered(transactionManager);
+                    break;
+                case 0:
+                    return;
             }
-        } else if (answer.equals("период")) {
-            System.out.println("Введите начальную дату в формате dd.MM.yyyy: ");
-            String startDate = scanner.nextLine();
-            System.out.println("Введите конечную дату в формате dd.MM.yyyy: ");
-            String endDate = scanner.nextLine();
-            
-            List<Transaction> transactions = transactionManager.getTransactionsByPeriod(LocalDate.parse(startDate), LocalDate.parse(endDate));
-            for (Transaction transaction : transactions) {
-                System.out.println(transaction);
+            if (!transactions.isEmpty()) {
+                System.out.println("История транзакций:");
+                for (Transaction transaction : transactions) {
+                    System.out.println(transaction);
+                }
             }
-        } else {
-            System.out.println("Неверный выбор");
         }
+    }
+
+    private static ArrayList<Transaction> getHistoryAll(TransactionManager transactionManager) {
+        return transactionManager.getTransactions();
+    }
+
+    private static ArrayList<Transaction> getHistoryFiltered(TransactionManager transactionManager) {
+        System.out.println("Введите начальную дату в формате dd.MM.yyyy: ");
+        String startDate = scanner.nextLine();
+        System.out.println("Введите конечную дату в формате dd.MM.yyyy: ");
+        String endDate = scanner.nextLine();
+        ArrayList<Transaction> transactions = new ArrayList<>();
+        try {
+            transactions = transactionManager.getTransactions(
+                    LocalDate.parse(startDate, dateFormat),
+                    LocalDate.parse(endDate, dateFormat)
+            );
+        } catch (DateTimeParseException exception) {
+            System.err.println("Введены неверные данные.");
+        }
+        return transactions;
     }
 }
