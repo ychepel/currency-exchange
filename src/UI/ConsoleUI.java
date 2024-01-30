@@ -17,23 +17,27 @@ public class ConsoleUI {
 
     public static void run() {
         printHeader();
-        while (true) {
-            System.out.println("Select an option: ");
-            System.out.println("1. Change currency");
-            System.out.println("2. View history");
-            System.out.println("0. Exit");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-            switch (choice) {
-                case 1:
-                    exchangeCurrency();
-                    break;
-                case 2:
-                    showHistory();
-                    break;
-                case 0:
-                    return;
+        try {
+            while (true) {
+                System.out.println("Select an option: ");
+                System.out.println("1. Change currency");
+                System.out.println("2. View history");
+                System.out.println("0. Exit");
+                int choice = scanner.nextInt();
+                scanner.nextLine();
+                switch (choice) {
+                    case 1:
+                        exchangeCurrency();
+                        break;
+                    case 2:
+                        showHistory();
+                        break;
+                    case 0:
+                        return;
+                }
             }
+        } catch (RuntimeException e) {
+            System.err.println("Unfortunately the operation cannot be performed due to a temporary malfunction. Please try again later.");
         }
     }
 
@@ -50,7 +54,7 @@ public class ConsoleUI {
 
         LocalDate currentDate = LocalDate.now();
 
-        System.out.printf("Today's %s. exchange rates:  %s.%n ",
+        System.out.printf("Today's %s. exchange rates:  %s.%n",
                 currentDate.format(dateFormat),
                 currencyManager.getAvailableCurrencies()
         );
@@ -70,7 +74,7 @@ public class ConsoleUI {
         double rate = currencyManager.calculateRate(fromCurrency, toCurrency);
         double resultAmount = amount * rate;
 
-        System.out.printf("Exchange %.2f %s to %.2f %s at %.4f rate %s? (Y/N)%n ",
+        System.out.printf("Exchange %.2f %s to %.2f %s at %.4f rate? (Y/N)%n ",
                 amount,
                 fromCurrency,
                 resultAmount,
