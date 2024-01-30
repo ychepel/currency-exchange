@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class ErrorLogHandler {
     private static final String LOG_FILE_PATH = "src/log.txt";
@@ -28,14 +30,15 @@ public class ErrorLogHandler {
 
     private static String format(Exception exception) {
         StackTraceElement[] stackTrace = exception.getStackTrace();
+        String a = Arrays.stream(stackTrace)
+                .map(trace -> trace.toString() + "\n")
+                .collect(Collectors.joining());
         StringBuilder builder = new StringBuilder();
-        builder.append("[").append(LocalDateTime.now()).append("] ");
+        builder.append("\n*****\n[").append(LocalDateTime.now()).append("] ");
         if (stackTrace.length > 0) {
             StackTraceElement firstStackTraceElement = stackTrace[0];
-            builder.append(firstStackTraceElement.getClassName())
-                    .append(".")
-                    .append(firstStackTraceElement.getMethodName())
-                    .append("() - ")
+            builder.append(a)
+                    .append("\n")
                     .append(exception.getClass().getSimpleName())
                     .append(": ")
                     .append(exception.getMessage());

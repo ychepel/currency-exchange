@@ -17,23 +17,29 @@ public class ConsoleUI {
 
     public static void run() {
         printHeader();
-        while (true) {
-            System.out.println("Выберите опцию: ");
-            System.out.println("1. Поменять валюту");
-            System.out.println("2. Посмотреть историю");
-            System.out.println("0. Выход");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-            switch (choice) {
-                case 1:
-                    exchangeCurrency();
-                    break;
-                case 2:
-                    showHistory();
-                    break;
-                case 0:
-                    return;
+        try {
+            while (true) {
+
+                System.out.println("Выберите опцию: ");
+                System.out.println("1. Поменять валюту");
+                System.out.println("2. Посмотреть историю");
+                System.out.println("0. Выход");
+                int choice = scanner.nextInt();
+                scanner.nextLine();
+                switch (choice) {
+                    case 1:
+                        exchangeCurrency();
+                        break;
+                    case 2:
+                        showHistory();
+                        break;
+                    case 0:
+                        return;
+                }
+
             }
+        } catch (RuntimeException e) {
+            System.err.println("Unfortunately the operation cannot be performed due to a temporary malfunction. Please try again later.");
         }
     }
 

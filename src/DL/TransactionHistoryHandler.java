@@ -18,6 +18,7 @@ public class TransactionHistoryHandler {
 
 
     public TransactionHistoryHandler(String path) {
+        this.file = new File(path);
         createIfNotExists(path);
     }
 
