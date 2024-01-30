@@ -18,10 +18,10 @@ public class ConsoleUI {
     public static void run() {
         printHeader();
         while (true) {
-            System.out.println("Выберите опцию: ");
-            System.out.println("1. Поменять валюту");
-            System.out.println("2. Посмотреть историю");
-            System.out.println("0. Выход");
+            System.out.println("Select an option: ");
+            System.out.println("1. Change currency");
+            System.out.println("2. View history");
+            System.out.println("0. Exit");
             int choice = scanner.nextInt();
             scanner.nextLine();
             switch (choice) {
@@ -50,27 +50,27 @@ public class ConsoleUI {
 
         LocalDate currentDate = LocalDate.now();
 
-        System.out.printf("Сегодня %s. Для обмена доступны следующие валюты:  %s.%n",
+        System.out.printf("Today's %s. exchange rates:  %s.%n ",
                 currentDate.format(dateFormat),
                 currencyManager.getAvailableCurrencies()
         );
 
-        System.out.print("Введите валюту, которую хотите обменять: ");
+        System.out.print("Enter the currency for exchange: ");
         String fromCurrencyString = scanner.nextLine().toUpperCase();
         CurrencyTitle fromCurrency = CurrencyTitle.valueOf(fromCurrencyString);
 
-        System.out.print("Введите сумму для обмена: ");
+        System.out.print("Enter the amount for exchanged: ");
         double amount = scanner.nextDouble();
         scanner.nextLine();
 
-        System.out.print("Введите валюту, которую хотите приобрести: ");
+        System.out.print("Enter the currency to acquire: ");
         String toCurrencyString = scanner.nextLine().toUpperCase();
         CurrencyTitle toCurrency = CurrencyTitle.valueOf(toCurrencyString);
 
         double rate = currencyManager.calculateRate(fromCurrency, toCurrency);
         double resultAmount = amount * rate;
 
-        System.out.printf("Вы хотите обменять %.2f %s на %.2f %s по курсу %.4f? (Y/N)%n",
+        System.out.printf("Exchange %.2f %s to %.2f %s at %.4f rate %s? (Y/N)%n ",
                 amount,
                 fromCurrency,
                 resultAmount,
@@ -81,19 +81,19 @@ public class ConsoleUI {
         if ("y".equals(answer)) {
             TransactionManager transactionManager = new TransactionManager();
             transactionManager.addTransaction(amount, fromCurrency, toCurrency, rate);
-            System.out.println("Обмен успешно выполнен");
+            System.out.println("Exchange was successful");
         } else {
-            System.out.println("Обмен отменен");
+            System.out.println("Exchange canceled");
         }
     }
 
     private static void showHistory() {
         TransactionManager transactionManager = new TransactionManager();
         while (true) {
-            System.out.println("Выберите опцию: ");
-            System.out.println("1. Вся история");
-            System.out.println("2. За период");
-            System.out.println("0. Вернуться в предыдущее меню");
+            System.out.println("Select an option: ");
+            System.out.println("1. All transaction");
+            System.out.println("2. For the period");
+            System.out.println("0. Return to previous menu");
             int choice = scanner.nextInt();
             scanner.nextLine();
             ArrayList<Transaction> transactions = new ArrayList<>();
@@ -108,7 +108,7 @@ public class ConsoleUI {
                     return;
             }
             if (!transactions.isEmpty()) {
-                System.out.println("История транзакций:");
+                System.out.println("Transactions history:");
                 for (Transaction transaction : transactions) {
                     System.out.println(transaction);
                 }
@@ -121,9 +121,9 @@ public class ConsoleUI {
     }
 
     private static ArrayList<Transaction> getHistoryFiltered(TransactionManager transactionManager) {
-        System.out.println("Введите начальную дату в формате dd.MM.yyyy: ");
+        System.out.println("Enter start date (format: dd.MM.yyyy: )");
         String startDate = scanner.nextLine();
-        System.out.println("Введите конечную дату в формате dd.MM.yyyy: ");
+        System.out.println("Enter end date (format: dd.MM.yyyy: )");
         String endDate = scanner.nextLine();
         ArrayList<Transaction> transactions = new ArrayList<>();
         try {
@@ -132,7 +132,7 @@ public class ConsoleUI {
                     LocalDate.parse(endDate, dateFormat)
             );
         } catch (DateTimeParseException exception) {
-            System.err.println("Введены неверные данные.");
+            System.err.println("Incorrect data entered.");
         }
         return transactions;
     }
