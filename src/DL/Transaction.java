@@ -1,29 +1,29 @@
 package DL;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Transaction {
-    private LocalDate deadLine;
+    private LocalDateTime dateTime;
     private double initialCurrencyAmount;
     private CurrencyTitle initialCurrencyTitle;
     private CurrencyTitle resultCurrencyTitle;
     private double exchangeRate;
 
 
-    public Transaction(LocalDate deadLine, double initialCurrencyAmount, CurrencyTitle initialCurrencyTitle, CurrencyTitle resultCurrencyTitle, double exchangeRate) {
-        this.deadLine = deadLine;
+    public Transaction(LocalDateTime dateTime, double initialCurrencyAmount, CurrencyTitle initialCurrencyTitle, CurrencyTitle resultCurrencyTitle, double exchangeRate) {
+        this.dateTime = dateTime;
         this.initialCurrencyAmount = initialCurrencyAmount;
         this.initialCurrencyTitle = initialCurrencyTitle;
         this.resultCurrencyTitle = resultCurrencyTitle;
         this.exchangeRate = exchangeRate;
     }
 
-    public LocalDate getDeadLine() {
-        return deadLine;
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
-    public void setDeadLine(LocalDate deadLine) {
-        this.deadLine = deadLine;
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
     public double getInitialCurrencyAmount() {
@@ -61,7 +61,7 @@ public class Transaction {
     @Override
     public String toString() {
         return "Transaction{" +
-                "deadLine=" + deadLine +
+                "dateTime=" + dateTime +
                 ", InitialCurrencyAmount=" + initialCurrencyAmount +
                 ", InitialCurrencyTitle='" + initialCurrencyTitle + '\'' +
                 ", ResultCurrencyTitle='" + resultCurrencyTitle + '\'' +
