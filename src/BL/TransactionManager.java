@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import DL.CurrencyExchangeHandler;
+import DL.Transaction;
 import DL.TransactionHistoryHandler;
 import DL.CurrencyTitle;
 
