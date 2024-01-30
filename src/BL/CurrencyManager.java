@@ -52,23 +52,13 @@ public class CurrencyManager {
      * Метод возвращает массив из CurrencyTitle, в котором содержаться только общие
      * элементы
      **/
-    public List<CurrencyTitle> getCurrencyTitles() {
-        CurrencyTitle[] currencyTitlesEnum = CurrencyTitle.values();
-        HashMap<CurrencyTitle, Double> currency_file = data.read();
-        CurrencyTitle[] currencyTitlesFile = currency_file.keySet().toArray(new CurrencyTitle[0]);
+    public List<CurrencyTitle> getAvailableCurrencies() {
+        HashMap<CurrencyTitle, Double> currencyFile = data.read();
+        CurrencyTitle[] currencyTitlesFile = currencyFile.keySet().toArray(new CurrencyTitle[0]);
 
-
-        List<CurrencyTitle> listEnum = Arrays.asList(currencyTitlesEnum);
         List<CurrencyTitle> listFile = Arrays.asList(currencyTitlesFile);
 
-        List<CurrencyTitle> listCommon = new ArrayList<>(listEnum);
-
-        for (CurrencyTitle element : listEnum) {
-            if (listFile.contains(element)) {
-                listCommon.add(element);
-            }
-        }
-        return listCommon;
+        return listFile;
 
     }
 
