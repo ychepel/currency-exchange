@@ -14,8 +14,8 @@ public class CurrencyExchangeHandler {
         this.file = new File(path);
     }
 
-    public HashMap<CurrencyTitle, Double> read() {
-        HashMap<CurrencyTitle, Double> hashMapList = new HashMap<>();
+    public HashMap<Currency, Double> read() {
+        HashMap<Currency, Double> hashMapList = new HashMap<>();
         Scanner scanner;
         try {
             scanner = new Scanner(this.file);
@@ -28,7 +28,7 @@ public class CurrencyExchangeHandler {
             String currencyRate = scanner.nextLine();
             String[] preHashMap = currencyRate.split(";");
             try {
-                CurrencyTitle currency = CurrencyTitle.valueOf(preHashMap[0]);
+                Currency currency = Currency.valueOf(preHashMap[0]);
                 double rate = Double.parseDouble(preHashMap[1].replace(",", "."));
                 if (rate == 0) throw new IllegalArgumentException("There is zero currency rate for " + currencyRate + "in data source.");
                 hashMapList.put(currency, rate);

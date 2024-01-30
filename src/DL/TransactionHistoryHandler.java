@@ -41,8 +41,8 @@ public class TransactionHistoryHandler {
                 try {
                     LocalDateTime dateTime = convertToDateTime(properties[0]);
                     double initialAmount = Double.parseDouble(properties[1].replace(",", "."));
-                    CurrencyTitle initialCurrency = CurrencyTitle.valueOf(properties[2]);
-                    CurrencyTitle resultCurrency = CurrencyTitle.valueOf(properties[3]);
+                    Currency initialCurrency = Currency.valueOf(properties[2]);
+                    Currency resultCurrency = Currency.valueOf(properties[3]);
                     double rate = Double.parseDouble(properties[4].replace(",", "."));
                     Transaction transaction = new Transaction(dateTime, initialAmount, initialCurrency, resultCurrency, rate);
                     result.add(transaction);
@@ -72,6 +72,7 @@ public class TransactionHistoryHandler {
     }
 
     private boolean isEmpty() {
+        //TODO: method should be optimised for not reading all data each time -> this.file.length()
         return read().isEmpty();
     }
 
@@ -85,6 +86,7 @@ public class TransactionHistoryHandler {
     }
 
     private LocalDateTime convertToDateTime(String datetime) {
+        //TODO: we should format data before storing in file. there may be different quantity of ms (real examples: 2024-01-30T20:55:42.391690100, 2024-01-30T23:05:37.400644)
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS");
         return LocalDateTime.parse(datetime, dateTimeFormatter);
     }

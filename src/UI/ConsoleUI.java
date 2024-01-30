@@ -2,7 +2,7 @@ package UI;
 
 import BL.CurrencyManager;
 import BL.TransactionManager;
-import DL.CurrencyTitle;
+import DL.Currency;
 import DL.Transaction;
 
 import java.time.LocalDate;
@@ -54,14 +54,14 @@ public class ConsoleUI {
 
         LocalDate currentDate = LocalDate.now();
 
-        System.out.printf("Today's %s. exchange rates:  %s.%n",
+        System.out.printf("Today's %s. exchange rates: %s.%n",
                 currentDate.format(dateFormat),
                 currencyManager.getAvailableCurrencies()
         );
 
         System.out.print("Enter the currency for exchange: ");
         String fromCurrencyString = scanner.nextLine().toUpperCase();
-        CurrencyTitle fromCurrency = CurrencyTitle.valueOf(fromCurrencyString);
+        Currency fromCurrency = Currency.valueOf(fromCurrencyString);
 
         System.out.print("Enter the amount for exchanged: ");
         double amount = scanner.nextDouble();
@@ -69,12 +69,12 @@ public class ConsoleUI {
 
         System.out.print("Enter the currency to acquire: ");
         String toCurrencyString = scanner.nextLine().toUpperCase();
-        CurrencyTitle toCurrency = CurrencyTitle.valueOf(toCurrencyString);
+        Currency toCurrency = Currency.valueOf(toCurrencyString);
 
         double rate = currencyManager.calculateRate(fromCurrency, toCurrency);
         double resultAmount = amount * rate;
 
-        System.out.printf("Exchange %.2f %s to %.2f %s at %.4f rate? (Y/N)%n ",
+        System.out.printf("Exchange %.2f %s to %.2f %s at %.4f rate? (Y/N) ",
                 amount,
                 fromCurrency,
                 resultAmount,
@@ -94,7 +94,7 @@ public class ConsoleUI {
     private static void showHistory() {
         TransactionManager transactionManager = new TransactionManager();
         while (true) {
-            System.out.println("Select an option: ");
+            System.out.println("\nSelect an option: ");
             System.out.println("1. All transaction");
             System.out.println("2. For the period");
             System.out.println("0. Return to previous menu");
@@ -116,7 +116,10 @@ public class ConsoleUI {
                 for (Transaction transaction : transactions) {
                     System.out.println(transaction);
                 }
+            } else {
+                System.out.println("No transactions.");
             }
+            System.out.println();
         }
     }
 
@@ -125,9 +128,9 @@ public class ConsoleUI {
     }
 
     private static ArrayList<Transaction> getHistoryFiltered(TransactionManager transactionManager) {
-        System.out.println("Enter start date (format: dd.MM.yyyy: )");
+        System.out.print("Enter start date (format: dd.MM.yyyy): ");
         String startDate = scanner.nextLine();
-        System.out.println("Enter end date (format: dd.MM.yyyy: )");
+        System.out.print("Enter end date (format: dd.MM.yyyy): ");
         String endDate = scanner.nextLine();
         ArrayList<Transaction> transactions = new ArrayList<>();
         try {

@@ -5,10 +5,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import DL.CurrencyExchangeHandler;
 import DL.Transaction;
 import DL.TransactionHistoryHandler;
-import DL.CurrencyTitle;
+import DL.Currency;
 
 public class TransactionManager {
     // Определяет приватное поле dataHistory, предназначенное для хранения экземпляра класса TransactionHistoryHandler
@@ -26,7 +25,7 @@ public class TransactionManager {
      * Параметры метода: InitialCurrencyAmount - сумма обмена, initialCurrency начальная валюта, resultCurrency конечная валюта
      * использует метод read() класса TransactionHistoryHandler.
      **/
-    public void addTransaction(double initialCurrencyAmount, CurrencyTitle initialCurrency, CurrencyTitle resultCurrency, double rate) {
+    public void addTransaction(double initialCurrencyAmount, Currency initialCurrency, Currency resultCurrency, double rate) {
         // Формируем ArrayList из транзакций из истории
         ArrayList<Transaction> data = this.dataHistory.read();
         // Создаем новую транзакцию
