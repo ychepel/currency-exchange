@@ -14,14 +14,11 @@ public class TransactionManager {
     // Определяет приватное поле dataHistory, предназначенное для хранения экземпляра класса TransactionHistoryHandler
     private static final String HISTORY_FILE_PATH = "src/history.csv";
     private final TransactionHistoryHandler dataHistory;
-    private final CurrencyManager exchangeRate;
 
 
     // Конструктор класса
     public TransactionManager() {
         this.dataHistory = new TransactionHistoryHandler(HISTORY_FILE_PATH);
-        this.exchangeRate = new CurrencyManager();
-
     }
 
     /**
@@ -29,7 +26,7 @@ public class TransactionManager {
      * Параметры метода: InitialCurrencyAmount - сумма обмена, initialCurrency начальная валюта, resultCurrency конечная валюта
      * использует метод read() класса TransactionHistoryHandler.
      **/
-    public void addTransaction(double initialCurrencyAmount, CurrencyTitle initialCurrency, CurrencyTitle resultCurrency) {
+    public void addTransaction(double initialCurrencyAmount, CurrencyTitle initialCurrency, CurrencyTitle resultCurrency, double rate) {
         // Формируем ArrayList из транзакций из истории
         ArrayList<Transaction> data = this.dataHistory.read();
         // Создаем новую транзакцию
@@ -38,7 +35,7 @@ public class TransactionManager {
                 initialCurrencyAmount,
                 initialCurrency,
                 resultCurrency,
-                exchangeRate.calculateRate(initialCurrency, resultCurrency)
+                rate
         );
         // Добавляем новую транзакцию в историю
         data.add(newTransaction);
@@ -51,20 +48,20 @@ public class TransactionManager {
      * Параметры метода: startDate - начала периода, endDate - окончание периода
      * использует метод getDateTime() класса Transaction.
      **/
-    //TODO - уточнить наличие метода getDateTime() в классе Transaction.
-    public ArrayList<Transaction> getTransactions(LocalDateTime startDate, LocalDateTime endDate) {
+
+    public ArrayList<Transaction> getTransactions(LocalDate startDate, LocalDate endDate) {
         // Формируем ArrayList из транзакций из истории
         ArrayList<Transaction> allTransactions = this.dataHistory.read();
-        // Если даты не указаны, то возвращаем весь список
-        // TODO - уточнить по вызову из UI
-        if (startDate == null && endDate == null){
-            return allTransactions;
-        // Фильтруем транзакции по заданному временному диапазону
-        } else
-            return allTransactions.stream()
-                    .filter(transaction ->
-                            !transaction.getDateTime().isBefore(startDate)
-                                    && !transaction.getDateTime().isAfter(endDate))
-                    .collect(Collectors.toCollection(ArrayList::new));
+        return allTransactions.stream()
+                .filter(transaction ->
+                        !transaction.getDateTime().isBefore(startDate.atStartOfDay())
+                                && !transaction.getDateTime().isAfter(endDate.atStartOfDay()))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public ArrayList<Transaction> getTransactions() {
+        // Формируем ArrayList из транзакций из истории
+        ArrayList<Transaction> allTransactions = this.dataHistory.read();
+        return allTransactions;
     }
 }
