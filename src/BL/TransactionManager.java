@@ -26,14 +26,13 @@ public class TransactionManager {
 
     /**
      * Метод addTransaction - добавляет новую транзакцию в историю транзакций.
-     * Параметры метода: InitialCurrencyAmount - сумма обмена, initialCurrency начальная валюта, resultCurrency  конечная валюта
-     * Использует метод read() класса TransactionHistoryHandler.
+     * Параметры метода: InitialCurrencyAmount - сумма обмена, initialCurrency начальная валюта, resultCurrency конечная валюта
+     * использует метод read() класса TransactionHistoryHandler.
      **/
     public void addTransaction(double initialCurrencyAmount, CurrencyTitle initialCurrency, CurrencyTitle resultCurrency) {
         // Формируем ArrayList из транзакций из истории
         ArrayList<Transaction> data = this.dataHistory.read();
         // Создаем новую транзакцию
-        //TODO - проверить конструктор в классе Transaction
         Transaction newTransaction = new Transaction(
                 LocalDateTime.now(),
                 initialCurrencyAmount,
@@ -41,7 +40,7 @@ public class TransactionManager {
                 resultCurrency,
                 exchangeRate.calculateRate(initialCurrency, resultCurrency)
         );
-        // Добавляем  новую транзакцию в историю
+        // Добавляем новую транзакцию в историю
         data.add(newTransaction);
         this.dataHistory.append(newTransaction);
     }
@@ -50,10 +49,10 @@ public class TransactionManager {
     /**
      * Метод getTransactions - возвращает список транзакций в заданном временном диапазоне.
      * Параметры метода: startDate - начала периода, endDate - окончание периода
-     * Использует метод getDateTime() класса Transaction.
+     * использует метод getDateTime() класса Transaction.
      **/
     //TODO - уточнить наличие метода getDateTime() в классе Transaction.
-    public ArrayList<Transaction> getTransactions(LocalDate startDate, LocalDate endDate) {
+    public ArrayList<Transaction> getTransactions(LocalDateTime startDate, LocalDateTime endDate) {
         // Формируем ArrayList из транзакций из истории
         ArrayList<Transaction> allTransactions = this.dataHistory.read();
         // Если даты не указаны, то возвращаем весь список
@@ -66,6 +65,6 @@ public class TransactionManager {
                     .filter(transaction ->
                             !transaction.getDateTime().isBefore(startDate)
                                     && !transaction.getDateTime().isAfter(endDate))
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toCollection(ArrayList::new));
     }
 }
