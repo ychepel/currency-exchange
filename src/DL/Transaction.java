@@ -6,16 +6,16 @@ import java.time.format.DateTimeFormatter;
 public class Transaction {
     private LocalDateTime dateTime;
     private double initialCurrencyAmount;
-    private CurrencyTitle initialCurrencyTitle;
-    private CurrencyTitle resultCurrencyTitle;
+    private Currency initialCurrency;
+    private Currency resultCurrency;
     private double exchangeRate;
 
 
-    public Transaction(LocalDateTime dateTime, double initialCurrencyAmount, CurrencyTitle initialCurrencyTitle, CurrencyTitle resultCurrencyTitle, double exchangeRate) {
+    public Transaction(LocalDateTime dateTime, double initialCurrencyAmount, Currency initialCurrency, Currency resultCurrency, double exchangeRate) {
         this.dateTime = dateTime;
         this.initialCurrencyAmount = initialCurrencyAmount;
-        this.initialCurrencyTitle = initialCurrencyTitle;
-        this.resultCurrencyTitle = resultCurrencyTitle;
+        this.initialCurrency = initialCurrency;
+        this.resultCurrency = resultCurrency;
         this.exchangeRate = exchangeRate;
     }
 
@@ -35,20 +35,20 @@ public class Transaction {
         this.initialCurrencyAmount = initialCurrencyAmount;
     }
 
-    public CurrencyTitle getInitialCurrencyTitle() {
-        return initialCurrencyTitle;
+    public Currency getInitialCurrencyTitle() {
+        return initialCurrency;
     }
 
-    public void setInitialCurrencyTitle(CurrencyTitle initialCurrencyTitle) {
-        this.initialCurrencyTitle = initialCurrencyTitle;
+    public void setInitialCurrencyTitle(Currency initialCurrency) {
+        this.initialCurrency = initialCurrency;
     }
 
-    public CurrencyTitle getResultCurrencyTitle() {
-        return resultCurrencyTitle;
+    public Currency getResultCurrencyTitle() {
+        return resultCurrency;
     }
 
-    public void setResultCurrencyTitle(CurrencyTitle resultCurrencyTitle) {
-        this.resultCurrencyTitle = resultCurrencyTitle;
+    public void setResultCurrencyTitle(Currency resultCurrency) {
+        this.resultCurrency = resultCurrency;
     }
 
     public double getExchangeRate() {
@@ -65,8 +65,8 @@ public class Transaction {
         return "Transaction details {" +
                 "date: " + dateTime.format(dateTimeFormatter) +
                 ", amount: " + initialCurrencyAmount +
-                ", currency for exchange: '" + initialCurrencyTitle + '\'' +
-                ", required currency: '" + resultCurrencyTitle + '\'' +
+                ", currency for exchange: '" + initialCurrency + '\'' +
+                ", required currency: '" + resultCurrency + '\'' +
                 ", exchange Rate: " + exchangeRate +
                 '}';
     }

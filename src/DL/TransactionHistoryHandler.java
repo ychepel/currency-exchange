@@ -15,7 +15,7 @@ import java.util.Scanner;
 public class TransactionHistoryHandler {
 
     private File file;
-
+    private final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public TransactionHistoryHandler(String path) {
         this.file = new File(path);
@@ -41,8 +41,8 @@ public class TransactionHistoryHandler {
                 try {
                     LocalDateTime dateTime = convertToDateTime(properties[0]);
                     double initialAmount = Double.parseDouble(properties[1].replace(",", "."));
-                    CurrencyTitle initialCurrency = CurrencyTitle.valueOf(properties[2]);
-                    CurrencyTitle resultCurrency = CurrencyTitle.valueOf(properties[3]);
+                    Currency initialCurrency = Currency.valueOf(properties[2]);
+                    Currency resultCurrency = Currency.valueOf(properties[3]);
                     double rate = Double.parseDouble(properties[4].replace(",", "."));
                     Transaction transaction = new Transaction(dateTime, initialAmount, initialCurrency, resultCurrency, rate);
                     result.add(transaction);
@@ -72,12 +72,12 @@ public class TransactionHistoryHandler {
     }
 
     private boolean isEmpty() {
-        return read().isEmpty();
+        return this.file.length() == 0;
     }
 
     private String getFormatted(Transaction transaction) {
         return String.format("%s;%.1f;%s;%s;%.2f",
-                transaction.getDateTime(),
+                transaction.getDateTime().format(dateFormat),
                 transaction.getInitialCurrencyAmount(),
                 transaction.getInitialCurrencyTitle(),
                 transaction.getResultCurrencyTitle(),
@@ -85,7 +85,6 @@ public class TransactionHistoryHandler {
     }
 
     private LocalDateTime convertToDateTime(String datetime) {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS");
-        return LocalDateTime.parse(datetime, dateTimeFormatter);
+        return LocalDateTime.parse(datetime, dateFormat);
     }
 }
