@@ -1,6 +1,7 @@
 package DL;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Transaction {
     private LocalDateTime dateTime;
@@ -60,12 +61,13 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return "Transaction{" +
-                "dateTime=" + dateTime +
-                ", InitialCurrencyAmount=" + initialCurrencyAmount +
-                ", InitialCurrencyTitle='" + initialCurrencyTitle + '\'' +
-                ", ResultCurrencyTitle='" + resultCurrencyTitle + '\'' +
-                ", ExchangeRate=" + exchangeRate +
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+        return "Transaction details {" +
+                "date: " + dateTime.format(dateTimeFormatter) +
+                ", amount: " + initialCurrencyAmount +
+                ", currency for exchange: '" + initialCurrencyTitle + '\'' +
+                ", required currency: '" + resultCurrencyTitle + '\'' +
+                ", exchange Rate: " + exchangeRate +
                 '}';
     }
 }
