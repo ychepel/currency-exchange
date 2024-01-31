@@ -54,7 +54,7 @@ public class ConsoleUI {
 
         LocalDate currentDate = LocalDate.now();
 
-        System.out.printf("Today's %s. exchange rates: %s.%n",
+        System.out.printf("Today's %s exchange rates: %s.%n",
                 currentDate.format(dateFormat),
                 currencyManager.getAvailableCurrencies()
         );
@@ -64,8 +64,8 @@ public class ConsoleUI {
         Currency fromCurrency = Currency.valueOf(fromCurrencyString);
 
         System.out.print("Enter the amount for exchanged: ");
-        double amount = scanner.nextDouble();
-        scanner.nextLine();
+        String amountString = scanner.nextLine();
+        double amount = Double.parseDouble(amountString.replace(",", "."));
 
         System.out.print("Enter the currency to acquire: ");
         String toCurrencyString = scanner.nextLine().toUpperCase();
@@ -74,7 +74,7 @@ public class ConsoleUI {
         double rate = currencyManager.calculateRate(fromCurrency, toCurrency);
         double resultAmount = amount * rate;
 
-        System.out.printf("Exchange %.2f %s to %.2f %s at %.4f rate? (Y/N) ",
+        System.out.printf("Exchange %.2f %s to %.2f %s at %.2f rate? (Y/N) ",
                 amount,
                 fromCurrency,
                 resultAmount,
@@ -85,9 +85,9 @@ public class ConsoleUI {
         if ("y".equals(answer)) {
             TransactionManager transactionManager = new TransactionManager();
             transactionManager.addTransaction(amount, fromCurrency, toCurrency, rate);
-            System.out.println("Exchange was successful");
+            System.out.println("Exchange was successful\n");
         } else {
-            System.out.println("Exchange canceled");
+            System.out.println("Exchange canceled\n");
         }
     }
 

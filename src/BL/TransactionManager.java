@@ -54,7 +54,7 @@ public class TransactionManager {
         return allTransactions.stream()
                 .filter(transaction ->
                         !transaction.getDateTime().isBefore(startDate.atStartOfDay())
-                                && !transaction.getDateTime().plusDays(1).isAfter(endDate.atStartOfDay()))
+                                && !transaction.getDateTime().isAfter(endDate.atStartOfDay().plusDays(1)))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
