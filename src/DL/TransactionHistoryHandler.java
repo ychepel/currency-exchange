@@ -15,7 +15,7 @@ import java.util.Scanner;
 public class TransactionHistoryHandler {
 
     private File file;
-
+    private final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public TransactionHistoryHandler(String path) {
         this.file = new File(path);
@@ -72,13 +72,12 @@ public class TransactionHistoryHandler {
     }
 
     private boolean isEmpty() {
-        //TODO: method should be optimised for not reading all data each time -> this.file.length()
-        return read().isEmpty();
+        return this.file.length() == 0;
     }
 
     private String getFormatted(Transaction transaction) {
         return String.format("%s;%.1f;%s;%s;%.2f",
-                transaction.getDateTime(),
+                transaction.getDateTime().format(dateFormat),
                 transaction.getInitialCurrencyAmount(),
                 transaction.getInitialCurrencyTitle(),
                 transaction.getResultCurrencyTitle(),
@@ -86,8 +85,6 @@ public class TransactionHistoryHandler {
     }
 
     private LocalDateTime convertToDateTime(String datetime) {
-        //TODO: we should format data before storing in file. there may be different quantity of ms (real examples: 2024-01-30T20:55:42.391690100, 2024-01-30T23:05:37.400644)
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS");
-        return LocalDateTime.parse(datetime, dateTimeFormatter);
+        return LocalDateTime.parse(datetime, dateFormat);
     }
 }
